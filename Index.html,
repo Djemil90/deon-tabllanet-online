@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEON Tabllanet Online</title>
+<style>
+:root {
+  --green: #064b35;
+  --dark: #061b15;
+  --gold: #e4bd58;
+  --cream: #fff4d5;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--cream);
+  background: radial-gradient(circle at top, #174c36, var(--dark) 75%);
+  min-height: 100vh;
+}
+header {
+  text-align: center;
+  padding: 24px 12px;
+  border-bottom: 1px solid #c49b45;
+}
+.logo {
+  font-size: clamp(26px, 6vw, 42px);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--gold);
+}
+header p { margin: 8px 0 0; color: #e6d9b7; }
+main { width: min(960px, 100%); margin: auto; padding: 20px 14px; }
+.panel {
+  border: 1px solid #cda94d;
+  border-radius: 22px;
+  padding: 20px;
+  background: #0b2c21;
+  box-shadow: 0 12px 35px #0006;
+  margin-bottom: 20px;
+}
+h2 { color: var(--gold); margin-top: 0; }
+button, select {
+  font-size: 16px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--gold);
+}
+button {
+  cursor: pointer;
+  color: #172218;
+  background: linear-gradient(135deg, #f5dc8b, #c39736);
+  font-weight: bold;
+}
+button:active { transform: scale(.98); }
+.menu { display: flex; flex-wrap: wrap; gap: 10px; }
+.menu button { flex: 1 1 135px; }
+.table {
+  min-height: 290px;
+  padding: 22px 12px;
+  border: 8px solid #b68a35;
+  border-radius: 150px;
+  background: radial-gradient(ellipse, #16804e, #075331 72%);
+  box-shadow: inset 0 0 0 3px #efd27a, 0 12px 28px #0008;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+.cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.card {
+  width: 53px;
+  height: 76px;
+  border-radius: 7px;
+  border: 1px solid #ddd;
+  background: #fffdf5;
+  color: #171717;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 3px 6px #0005;
+}
+.red { color: #bd1e30; }
+#game { display: none; }
+.small { font-size: 13px; color: #d4d0bc; line-height: 1.6; }
+footer { text-align: center; color: #cdbb8b; padding: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">♠ DEON ♣</div>
+  <h1>Tabllanet Online</h1>
+  <p>Strategji • Miqësi • Traditë</p>
+</header>
+
+<main>
+  <section class="panel" id="home">
+    <h2 id="welcome">Mirë se erdhe!</h2>
+    <p>Zgjidh gjuhën dhe mënyrën e lojës.</p>
+    <select id="language" aria-label="Gjuha" onchange="changeLanguage()">
+      <option value="sq">Shqip</option>
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+    </select>
+    <div class="menu" style="margin-top:18px">
+      <button onclick="startGame(2)" id="two">Luaj me 2 lojtarë</button>
+      <button onclick="startGame(4)" id="four">Luaj me 4 lojtarë</button>
+    </div>
+    <p class="small">Ky është versioni fillestar. Loja online me persona të tjerë do të aktivizohet pasi të lidhet sistemi multiplayer.</p>
+  </section>
+
+  <section id="game" class="panel">
+    <div class="menu">
+      <button onclick="goHome()" id="back">← Menuja</button>
+      <button onclick="newRound()" id="new">Rifillo lojën</button>
+    </div>
+    <h2 id="gameTitle">Tavolina DEON</h2>
+    <div class="table">
+      <div id="players">Lojtarët</div>
+      <div class="cards" id="tableCards"></div>
+      <div id="turn">Radha e lojtarit 1</div>
+    </div>
+    <h2 id="handTitle">Letrat e tua</h2>
+    <div class="cards" id="hand"></div>
+    <p id="message">Zgjidh një letër.</p>
+    <p class="small">Prototip vizual: rregullat e plota të kapjes dhe pikëzimit do të shtohen në hapin tjetër.</p>
+  </section>
+</main>
+<footer>DEON Tabllanet Online © 2026</footer>
+
+<script>
+const texts = {
+ sq: {welcome:"Mirë se erdhe!",two:"Luaj me 2 lojtarë",four:"Luaj me 4 lojtarë",back:"← Menuja",fresh:"Rifillo lojën",title:"Tavolina DEON",hand:"Letrat e tua",turn:"Radha e lojtarit",message:"Zgjidh një letër.",players:"Lojtarët"},
+ it: {welcome:"Benvenuto!",two:"Gioca con 2 giocatori",four:"Gioca con 4 giocatori",back:"← Menu",fresh:"Nuova partita",title:"Tavolo DEON",hand:"Le tue carte",turn:"Turno del giocatore",message:"Scegli una carta.",players:"Giocatori"},
+ de: {welcome:"Willkommen!",two:"Mit 2 Spielern spielen",four:"Mit 4 Spielern spielen",back:"← Menü",fresh:"Neues Spiel",title:"DEON Spieltisch",hand:"Deine Karten",turn:"Spieler am Zug",message:"Wähle eine Karte.",players:"Spieler"}
+};
+const deckSuits = ["♠","♥","♦","♣"];
+let deck = [], hand = [], table = [], playerCount = 2, turn = 1;
+function shuffle(a) {
+  for(let i=a.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function makeDeck(){
+  const d=[];
+  for(const s of deckSuits)
+    for(const r of ["A","2","3","4","5","6","7","8","9","10","J","Q","K"])
+      d.push({r,s});
+  return shuffle(d);
+}
+function changeLanguage(){
+  const t=texts[document.getElementById("language").value];
+  document.documentElement.lang=document.getElementById("language").value;
+  document.getElementById("welcome").textContent=t.welcome;
+  document.getElementById("two").textContent=t.two;
+  document.getElementById("four").textContent=t.four;
+  document.getElementById("back").textContent=t.back;
+  document.getElementById("new").textContent=t.fresh;
+  document.getElementById("gameTitle").textContent=t.title;
+  document.getElementById("handTitle").textContent=t.hand;
+  document.getElementById("players").textContent=t.players+" • "+playerCount;
+  document.getElementById("turn").textContent=t.turn+" "+turn;
+  document.getElementById("message").textContent=t.message;
+}
+function startGame(n){
+  playerCount=n;
+  document.getElementById("home").style.display="none";
+  document.getElementById("game").style.display="block";
+  newRound();
+}
+function newRound(){
+  deck=makeDeck();
+  hand=deck.splice(0,6);
+  table=deck.splice(0,4);
+  turn=1;
+  render();
+}
+function render(){
+  const suits={"♥":true,"♦":true};
+  document.getElementById("tableCards").innerHTML=table.map((c,i)=>
+    `<button class="card ${suits[c.s]?'red':''}" aria-label="Letra ${c.r}${c.s}" onclick="takeCard(${i})">${c.r}${c.s}</button>`
+  ).join("");
+  document.getElementById("hand").innerHTML=hand.map((c,i)=>
+    `<button class="card ${suits[c.s]?'red':''}" aria-label="Luaj ${c.r}${c.s}" onclick="playCard(${i})">${c.r}${c.s}</button>`
+  ).join("");
+  document.getElementById("players").textContent=texts[document.getElementById("language").value].players+" • "+playerCount;
+  document.getElementById("turn").textContent=texts[document.getElementById("language").value].turn+" "+turn;
+}
+function playCard(i){
+  if(!hand[i])return;
+  const c=hand.splice(i,1)[0];
+  table.push(c);
+  turn=turn%playerCount+1;
+  render();
+  document.getElementById("message").textContent="Letra u vendos në tavolinë.";
+  if(hand.length===0)document.getElementById("message").textContent="Raundi përfundoi. Shtyp Rifillo lojën.";
+}
+function takeCard(i){
+  if(!table[i])return;
+  hand.push(table.splice(i,1)[0]);
+  turn=turn%playerCount+1;
+  render();
+  document.getElementById("message").textContent="More një letër nga tavolina.";
+}
+function goHome(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("home").style.display="block";
+}
+changeLanguage();
+</script>
+</body>
+</html>
