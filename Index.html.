@@ -244,4 +244,4 @@ function takeCard(i){if(!table[i])return;hand.push(table.splice(i,1)[0]);turn=tu
 function goHome(){$('game').style.display='none';$('home').style.display='block'}
 changeLanguage();
 </script>
-</body></html
+</body></html>
